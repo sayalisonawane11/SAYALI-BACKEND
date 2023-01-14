@@ -17,14 +17,24 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset = User.objects.get()
+    )
     class Meta:
         model = Recipe
-        fields = "__all__"
+        fields = ('recipe_id', 'name', 'desc', 'image', 'user')
+        read_only_fields = ('recipe_id',)
 
 class IngredientsSerializer(serializers.ModelSerializer):
+    recipe = serializers.PrimaryKeyRelatedField(
+    many=True,
+    queryset = Recipe.objects.all()
+    )
     class Meta:
         model = Ingredients
-        fields = "__all__"
+        fields = ('ingredient_id', 'items', 'amount', 'unit', 'recipe')
+        read_only_fields = ('ingredient_id',)
     
 class ProcessSerializer(serializers.ModelSerializer):
     class Meta:
